@@ -5,4 +5,5 @@ package org.example.logger.logger.formatter;
 public interface FormatterFactory {
 
     Formatter produce();
+
 }

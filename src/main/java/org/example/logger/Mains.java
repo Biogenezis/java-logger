@@ -21,9 +21,12 @@ public class Mains {
 
         //TODO: refactor
         Formatter simpleLayout = new FormatterImpl();
-        Appender consoleAppender = new ConsoleAppender(simpleLayout);
-        Appender fileAppender = new FileAppender(simpleLayout);
+        Appender consoleAppender = new ConsoleAppender(simpleLayout, Level.DEBUG);
+        Appender fileAppender = new FileAppender(simpleLayout, Level.ERROR);
         Logger logger = new LoggerImpl(consoleAppender, fileAppender);
+
+//        Appender consoleAppenderSecond = new ConsoleAppender(simpleLayout, Level.DEBUG);
+//        fileAppender.append(LocalDateTime.now(), "Test message", Level.DEBUG);
 
 
         Scanner scanner = new Scanner(System.in);
@@ -45,7 +48,7 @@ public class Mains {
             case "/" -> result = firstNumber / secondNumber;
             default -> System.out.println("Default case");
         }
-        logger.log(Level.ALL, " result ", result);
+        logger.log(Level.TRACE, " result ", result);
     }
 
 

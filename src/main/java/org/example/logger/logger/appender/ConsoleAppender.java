@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ConsoleAppender extends AbstractAppender {
 
     public ConsoleAppender(Formatter formatter) {
-        super(formatter);
+        this(formatter, Level.TRACE);
     }
 
     public ConsoleAppender(Formatter formatter, Level level) {

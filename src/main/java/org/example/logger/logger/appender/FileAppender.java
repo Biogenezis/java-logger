@@ -1,9 +1,13 @@
 package org.example.logger.logger.appender;
 
+import org.example.logger.logger.exception.LogFileNotFound;
 import org.example.logger.logger.formatter.Formatter;
 import org.example.logger.logger.helpers.Level;
+import org.example.logger.logger.props.PropertiesLoader;
+import org.example.logger.logger.props.Resources;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -11,44 +15,48 @@ import java.time.LocalDateTime;
 
 public class FileAppender extends AbstractAppender {
 
-    private final String pathFile = "C:\\Users\\Vladimir_Zimin\\testFile.txt";
+    //Edit this
+    private final String pathFile;
 
-    private String appenderLogs;
+    private static final Resources resources = new PropertiesLoader();
 
-    public FileAppender(Formatter formatter) {
-        super(formatter, Level.ALL);
-    }
+    private final ThreadLocal<File> currentFile = new ThreadLocal<>();
+
+    //TODO: how close it with the finish of program
+    private File file;
+
 
     public FileAppender(Formatter formatter, Level level) {
         super(formatter, level);
+        this.pathFile = resources.getValue("logger.file.path");
+        this.file = new File(pathFile);
+        this.currentFile.set(file);
     }
 
     @Override
-    public void append(LocalDateTime localDateTime, String message, Level level) throws IOException {
-        String bufferMsg = appenderLogs.concat(message);
-        String formatted = this.getFormatter().format(localDateTime, level, bufferMsg);
+    public void append(LocalDateTime localDateTime, String message, Level level) {
+        String formatted = this.getFormatter().format(localDateTime, level, message);
         writeFile(formatted);
 
     }
 
     @Override
-    public void append(LocalDateTime localDateTime, String message, Level level, Object... args) throws IOException {
+    public void append(LocalDateTime localDateTime, String message, Level level, Object... args) {
         String formatted = this.getFormatter().format(localDateTime, level, message, args);
         writeFile(formatted);
     }
 
-    private void writeFile(String formatted) throws IOException {
-        File file = new File(pathFile);
-        if (!file.createNewFile()) {
-            try(FileWriter myWriter = new FileWriter(file, true)) {
-                myWriter.append(formatted);
-                myWriter.flush();
-            }
-        } else {
-            try(FileWriter myWriter = new FileWriter(pathFile, true)) {
-                myWriter.append(formatted);
-                myWriter.flush();
-            }
+    private void writeFile(String formattedString) throws LogFileNotFound {
+        try {
+            FileWriter myWriter = new FileWriter(currentFile.get(), true);
+            myWriter.append(formattedString);
+            myWriter.flush();
+            myWriter.close();
+        } catch (IOException logFileNotFound) {
+            throw new LogFileNotFound("File not found");
         }
     }
+
+
 }
+

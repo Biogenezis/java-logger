@@ -11,16 +11,9 @@ public abstract class AbstractAppender implements Appender{
 
     private Level level;
 
-    public AbstractAppender() {
-    }
-
     public AbstractAppender(Formatter formatter, Level level) {
         this.formatter = formatter;
         this.level = level;
-    }
-
-    public AbstractAppender(Formatter formatter) {
-        this(formatter, Level.ALL);
     }
 
     public Formatter getFormatter() {
@@ -33,12 +26,6 @@ public abstract class AbstractAppender implements Appender{
         return level;
     }
 
-
-    @Override
-    public String toString() {
-        return "Appender type: " + String.format("Report level: %s, ", this.getLevel()).toString() +
-                "Messages appended: ";
-    }
 
 
 }

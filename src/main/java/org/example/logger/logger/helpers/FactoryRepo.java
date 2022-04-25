@@ -7,28 +7,10 @@ import org.example.logger.logger.formatter.FormatterFactory;
 import org.example.logger.logger.formatter.FormatterFactoryImpl;
 
 //Как эти фабрики вызвать?
-public class FactoryRepo {
+public final class FactoryRepo {
 
-    private static AppenderFactory appenderFactory;
+    private static final AppenderFactory appenderFactory = new AppenderFactoryImpl();
 
-    private static FormatterFactory formatterFactory;
-
-    private FactoryRepo() {
-
-    }
-
-    public static AppenderFactory getAppenderFactory() {
-        if (appenderFactory == null) {
-            return appenderFactory = new AppenderFactoryImpl();
-        }
-        return appenderFactory;
-    }
-
-    public static FormatterFactory getLayoutFactory() {
-        if (formatterFactory == null) {
-            return formatterFactory = new FormatterFactoryImpl();
-        }
-        return formatterFactory;
-    }
+    private static final FormatterFactory formatterFactory = new FormatterFactoryImpl();
 
 }
