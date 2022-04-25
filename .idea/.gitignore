@@ -1,6 +1,17 @@
 # Default ignored files
 /shelf/
-/target/
 /.idea/
 /workspace.xml
 /vcs.xml
+
+
+/target/
+*/target/**
+**/META-INF/
+!.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
